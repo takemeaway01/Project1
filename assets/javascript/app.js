@@ -133,7 +133,7 @@ $("#go").on("click", function (event) {
 			async: true,
 			crossDomain: true,
 			beforeSend: function (xhr) {
-				xhr.setRequestHeader("Authorization", "Bearer " + "jWE2PfjhTGraI4NuIhGrTX3KPU2a");
+				xhr.setRequestHeader("Authorization", "Bearer " + "yKraSolsA4XaMhPkfejUO5JOCAqA");
 			},
 			success: function (json) {
 				console.log("json: " + JSON.stringify(json));
@@ -151,7 +151,7 @@ $("#go").on("click", function (event) {
 				for (var i = 0; i < AmadeusData.length; i++) {
 					poiData.push({ category: AmadeusData[i].category, name: AmadeusData[i].name, rank: AmadeusData[i].rank, tags: AmadeusData[i].tags });
 
-					
+
 
 					// Create the new row
 					var newRow = $("<tr>").append(
