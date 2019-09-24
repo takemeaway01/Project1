@@ -21,7 +21,7 @@ $(".travel-button").on("click",function(){
         console.log(response)
         $("#tempimg").html('<img src="http://openweathermap.org/img/wn/'+response.weather[0].icon+'@2x.png">')
         $(".js-city").text(city)
-        $("#temperature").text(response.main.temp)
+        $(".js-weather-temp").text(response.main.temp)
 
         
     })
