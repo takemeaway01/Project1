@@ -229,10 +229,23 @@ $("#go").on("click", function (event) {
         $(".js-weather-temp").text(response.main.temp)
 
         
-    })
-
-
-
+	})
+	console.log("before")
+	var settings2 = {
+		"async": true,
+		"crossDomain": true,
+		"url": "https://community-open-weather-map.p.rapidapi.com/forecast/daily?lat=35&lon=139&cnt=10&units=metric%20or%20imperial&mode=xml%2C%20html&q="+strCity,
+		"method": "GET",
+		"headers": {
+			"x-rapidapi-host": "community-open-weather-map.p.rapidapi.com",
+			"x-rapidapi-key": "147b3f8497msh00278760d20ce9bp1c5669jsnacb348959b12"
+		}
+	}
+	
+	$.ajax(settings2).done(function (response) {
+		console.log(response);
+		console.log("after")
+	});
 
 });
 
