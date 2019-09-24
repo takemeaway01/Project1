@@ -12,29 +12,6 @@ var pageOffset = 0;
 var queryURLAmadeus = "";
 var AmadeusData = [];
 var poiData = [];
-	/*{
-		"category": "",
-		"name": "",
-		"rank": "",
-		"tags": []
-	}
-];*/
-
-// Initialize Firebase
-var firebaseConfig = {
-	apiKey: "AIzaSyDaxfigNzvcKeClhprOrG_5s-0JS5y-4iU",
-	authDomain: "project1-961a7.firebaseapp.com",
-	databaseURL: "https://project1-961a7.firebaseio.com",
-	projectId: "project1-961a7",
-	storageBucket: "project1-961a7.appspot.com",
-	messagingSenderId: "383475471482",
-	appId: "1:383475471482:web:0a43d3b380d67da8e8d7c3"
-};
-
-firebase.initializeApp(firebaseConfig);
-
-var database = firebase.database();
-
 
 
 
@@ -45,12 +22,12 @@ var database = firebase.database();
 function buildQueryURLOpenCageData() {
 	// strURL is the URL we'll use to query the Open Cage Data API
 	strURL = "";
-	strURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json?";
+	// strURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json?";
 
 	// Begin building an object to contain our API call's query parameters
 	// Set the API key
 	var queryParams = {};
-	queryParams = { "api-key": "R1a31F4tBjCUaM2ho8GtIFsrSdtXt30M" };
+	// queryParams = { "api-key": "R1a31F4tBjCUaM2ho8GtIFsrSdtXt30M" };
 
 	// Grab the city that the user typed into the search input, add to the queryParams object
 	queryParams.q = $("#search-city").val().trim();
@@ -105,42 +82,50 @@ $("#go").on("click", function (event) {
 $.ajax({
 	method: "GET",
 	url: "https://test.api.amadeus.com/v1/reference-data/locations/pois?latitude=41.397158&longitude=2.160873 &radius=2&page[limit]=10&page[offset]=0",
-	dataType: 'json',
+	dataType: "json",
 	async: true,
 	crossDomain: true,
 	beforeSend: function (xhr) {
-		xhr.setRequestHeader('Authorization', 'Bearer ' + 'XW1GvlXFbweLVT4XJJACg6Vctvht');
+		xhr.setRequestHeader("Authorization", "Bearer " + "hxUBGP7zKAwzrjOqrpePfKdJqiaX");
 	},
 	success: function (json) {
-		console.log(json);
-		AmadeusData = json.data;
-		console.log(AmadeusData);
+		console.log("json: " + json);
 
-		//ojo Should store results from Amadeus in Firebase as a backup (Keep Firebase Initialization and variable globally and/or in main process???)
+		// Web app's Firebase configuration
+		var firebaseConfig = {
+			apiKey: "AIzaSyCr5-OYKTaDKEYDPTMX7j8cYJdCPidavtY",
+			authDomain: "project1-94b01.firebaseapp.com",
+			databaseURL: "https://project1-94b01.firebaseio.com",
+			projectId: "project1-94b01",
+			storageBucket: "",
+			messagingSenderId: "215218801398",
+			appId: "1:215218801398:web:17f017d3ae14f36007bad7"
+		};
+
+		// Initialize Firebase
+		firebase.initializeApp(firebaseConfig);
+
+		// Get a reference to the database service
+		var database = firebase.database();
 
 		// Store results from Amadeus API in Firebase's DB
-		// ojo database.ref("/AmadeusData").push(AmadeusData);
+		database.ref("/AmadeusResults").set(json);
+
+		// Store results data array into array AmadeusData
+		AmadeusData = json.data;
 
 		// Parse results to grab relevant data of Point of Interests (up to 10 items per page)
 		// 6 categories: Sights, Beach/Park, Historical, Nightlife, Restaurant and Shopping
 		// Rank (0-100): Based on popularity and on certain categories of social relevance.
 		//				 For example, found popular venues to visit, but not to eat or vice-versa. 
 		for (var i = 0; i < AmadeusData.length; i++) {
-			console.log("i: " + i + "; category: " + AmadeusData[i].category);
-			console.log("i: " + i + "; name: " + AmadeusData[i].name);
-			console.log("i: " + i + "; rank: " + AmadeusData[i].rank);
-			console.log("i: " + i + "; tags: " + AmadeusData[i].tags);
+			poiData.push({ category: AmadeusData[i].category, name: AmadeusData[i].name, rank: AmadeusData[i].rank, tags: AmadeusData[i].tags });
 
-			poiData.push({category: AmadeusData[i].category, name: AmadeusData[i].name, rank: AmadeusData[i].rank, tags: AmadeusData[i].tags});
-
-			console.log("i: " + i + "; poiData: " + poiData[i]);
+			console.log("i: " + i + "; poiData[i].category: " + poiData[i].category);
+			console.log("i: " + i + "; poiData[i].name: " + poiData[i].name);
+			console.log("i: " + i + "; poiData[i].rank: " + poiData[i].rank);
+			console.log("i: " + i + "; poiData[i].tags: " + poiData[i].tags);
 		}
-
-
-
-
-
-
 
 
 
@@ -150,6 +135,7 @@ $.ajax({
 	}
 });
 
+// ojo
 // $('.travel-results').hide();
 // $('.js-repeat-search').hide();
 
