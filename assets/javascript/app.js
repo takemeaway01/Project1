@@ -207,6 +207,29 @@ $("#go").on("click", function (event) {
 	})
 
 
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://community-open-weather-map.p.rapidapi.com/weather?&id=2172797&units=imperial&q="+strCity,
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "community-open-weather-map.p.rapidapi.com",
+            "x-rapidapi-key": "147b3f8497msh00278760d20ce9bp1c5669jsnacb348959b12"
+
+
+        }
+
+    }
+    
+    
+    $.ajax(settings).done(function (response) {
+        console.log(response)
+        $("#tempimg").html('<img src="http://openweathermap.org/img/wn/'+response.weather[0].icon+'@2x.png">')
+        $(".js-city").text(strCity)
+        $(".js-weather-temp").text(response.main.temp)
+
+        
+    })
 
 
 
