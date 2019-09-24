@@ -1,18 +1,15 @@
 
 // VARIABLES
 // ==============================================================================
-var strCity = "";
-var queryURLOpenCageData = "";
-var CityFormatted = "";
-var CityLatLng = {};
-var apiLatitude = 0;
-var apiLongitude = 0;
+var strCity = "";								// String for storing city from input textbox
+var CityLatLng = {};							// Object for storing OpenCageData API's Latitude/Longitude of city 
+var apiLatitude = 0;							// Amadeus API Parameter for Latitude
+var apiLongitude = 0;							// Amadeus API Parameter for Longitude
 var apiRadius = 2;								// Amadeus API Parameter for radius set to 2 KM
 var apiPageLimit = 10;							// Amadeus API Parameter for max number of results set to 10
 var apiPageOffset = 0;							// Amadeus API Parameter for offset of results set to 0
-var AmadeusData = [];
-var poiData = [];
-
+var AmadeusData = [];							// Array for storing Amadeus API Data
+var poiData = [];								// Array for storing Points of Interest (i.e. Name, Category)
 
 // Web app's Firebase configuration
 var firebaseConfig = {
@@ -31,80 +28,31 @@ firebase.initializeApp(firebaseConfig);
 // Get a reference to the database service
 var database = firebase.database();
 
-
 // FUNCTIONS
 // ==============================================================================
 
 // Function to empty out the Points of Interest of the specified location
 function clear() {
 	$(".travel-results").empty();
-
-	$(".travel-button").on("click", function () {
-		console.log("in here")
-		var city = $("#city").val()
-
-		var settings = {
-			"async": true,
-			"crossDomain": true,
-			"url": "https://community-open-weather-map.p.rapidapi.com/weather?&id=2172797&units=imperial&q=" + city,
-			"method": "GET",
-			"headers": {
-				"x-rapidapi-host": "community-open-weather-map.p.rapidapi.com",
-				"x-rapidapi-key": "147b3f8497msh00278760d20ce9bp1c5669jsnacb348959b12"
-
-
-			}
-
-		}
-
-
-		$.ajax(settings).done(function (response) {
-			console.log(response)
-			$("#tempimg").html('<img src="http://openweathermap.org/img/wn/' + response.weather[0].icon + '@2x.png">')
-			$(".js-city").text(city)
-			$(".js-weather-temp").text(response.main.temp)
-
-
-		})
-
-
-	})
-
-
-
-
-
-
-
-	// var s = {
-	//     method: "GET",
-	//     url: "https://test.api.amadeus.com/v1/reference-data/locations/pois?latitude=41.8781&longitude=2.160873&radius=2",
-	//     headers: {
-	//         'Authorization': 'Bearer ' + '8YgtfFS5HioRG39VFEIFdkYE8BkE'
-	//     },
-	//     async: true,
-	//     crossDomain:true
-	// }
-	// $.ajax(
-	//     {
-	//     method: "GET",
-	//     url: "https://test.api.amadeus.com/v1/reference-data/locations/pois?latitude=41.397158&longitude=2.160873&radius=2",
-	//     dataType: 'json',
-	//     async: true,
-	//     crossDomain:true,
-	//     beforeSend: function(xhr) {
-	//         xhr.setRequestHeader('Authorization',
-	//             'Bearer ' + 'JRv8V0WeUU6mJuu6t3qnVJvSBA78');
-	//     },                
-	//     success: function(json) {
-	//         console.log(json);
-	//     },
-	//     error: function(err){
-	// console.log(err);
-
-	//     }
-
 }
+
+
+$(".travel-button").on("click", function () {
+	console.log("in here")
+	var city = $("#city").val()
+
+
+
+
+
+
+})
+
+
+
+
+
+
 
 
 // MAIN PROCESS
@@ -122,13 +70,30 @@ $("#go").on("click", function (event) {
 	// Grab the city that the user typed into the search input.
 	// Format it so that special characters are properly handled by using encodeURIComponent().
 	var strCity = encodeURIComponent($("#search-city").val().trim());
+
 	console.log("strCity: " + strCity);
 
-	console.log("On click GO Button!");
+	// Make the AJAX request to the Open Weather Map API to get the city's current weather
+	var settings = {
+		"async": true,
+		"crossDomain": true,
+		"url": "https://community-open-weather-map.p.rapidapi.com/weather?&id=2172797&units=imperial&q=" + strCity,
+		"method": "GET",
+		"headers": {
+			"x-rapidapi-host": "community-open-weather-map.p.rapidapi.com",
+			"x-rapidapi-key": "147b3f8497msh00278760d20ce9bp1c5669jsnacb348959b12"
+		}
+	}
+	$.ajax(settings).done(function (response) {
+		console.log("Weather info response: " + response);
+
+		$("#tempimg").html('<img src="http://openweathermap.org/img/wn/' + response.weather[0].icon + '@2x.png">');
+		$(".js-city").text(strCity);
+		$(".js-weather-temp").text(response.main.temp);
+	});
 
 	// Make the AJAX request to the Open Cage Data API
 	$.ajax({
-		// url: queryURLOpenCageData,
 		url: "https://api.opencagedata.com/geocode/v1/json?",
 		method: "GET",
 		data: {
@@ -139,13 +104,12 @@ $("#go").on("click", function (event) {
 			pretty: 1
 		}
 	}).then(function (response) {
-		console.log("response.results: " + JSON.stringify(response.results[0]));
+		console.log("response.results: " + JSON.stringify(response.results[0].geometry));
 
 		// Store results from Open Cage Data API in Firebase's DB
-		database.ref("/OpenCageDataResults").push(response.results[0]);
+		database.ref("/OpenCageDataResults/" + strCity).push(response.results[0].geometry);
 
 		// Store the data from the AJAX request in a variable
-		CityFormatted = response.results[0].formatted;
 		CityLatLng = response.results[0].geometry;
 
 		// Grab the latitude/longitude into variables
@@ -169,13 +133,13 @@ $("#go").on("click", function (event) {
 			async: true,
 			crossDomain: true,
 			beforeSend: function (xhr) {
-				xhr.setRequestHeader("Authorization", "Bearer " + "1uYMtmGTRopdpOgNDxuZt2MVM3qZ");
+				xhr.setRequestHeader("Authorization", "Bearer " + "jWE2PfjhTGraI4NuIhGrTX3KPU2a");
 			},
 			success: function (json) {
 				console.log("json: " + JSON.stringify(json));
 
 				// Store results from Amadeus API in Firebase's DB
-				database.ref("/AmadeusResults").push(json);
+				database.ref("/AmadeusResults/" + strCity).push(json);
 
 				// Store results data array into array AmadeusData
 				AmadeusData = json.data;
@@ -187,19 +151,21 @@ $("#go").on("click", function (event) {
 				for (var i = 0; i < AmadeusData.length; i++) {
 					poiData.push({ category: AmadeusData[i].category, name: AmadeusData[i].name, rank: AmadeusData[i].rank, tags: AmadeusData[i].tags });
 
-					console.log("i: " + i + "; poiData[i].category: " + poiData[i].category);
-					console.log("i: " + i + "; poiData[i].name: " + poiData[i].name);
-					console.log("i: " + i + "; poiData[i].rank: " + poiData[i].rank);
-					console.log("i: " + i + "; poiData[i].tags: " + poiData[i].tags);
+					
 
 					// Create the new row
 					var newRow = $("<tr>").append(
-						$("<td>").text(poiData[i].category),
-						$("<td>").text(poiData[i].name)
+						$("<td>").text(poiData[i].name),
+						$("<td>").text(poiData[i].category)
 					);
 
 					// Append the new row to the table
 					$("#poi-table > tbody").append(newRow);
+
+					// console.log("i: " + i + "; poiData[i].category: " + poiData[i].category);
+					// console.log("i: " + i + "; poiData[i].name: " + poiData[i].name);
+					// console.log("i: " + i + "; poiData[i].rank: " + poiData[i].rank);
+					// console.log("i: " + i + "; poiData[i].tags: " + poiData[i].tags);
 				}
 
 
@@ -209,23 +175,8 @@ $("#go").on("click", function (event) {
 			}
 		});
 
-
 	}).catch(function () {
 		$('js-interests').text('Error loading information');
 	})
 
-
-
-
-
-
 });
-
-
-// ojo
-// $('.travel-results').hide();
-// $('.js-repeat-search').hide();
-
-// $('.travel-results').hide();
-
-
