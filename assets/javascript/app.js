@@ -155,8 +155,6 @@ $("#go").on("click", function (event) {
 		console.log("apiLatitude: " + apiLatitude);
 		console.log("apiLongitude: " + Math.abs(apiLongitude));
 
-
-
 		// Make the AJAX request to the Amadeus API
 		// The API's Access Token is ONLY VALID for 30 minutes!!!
 		$.ajax({
@@ -171,7 +169,7 @@ $("#go").on("click", function (event) {
 			async: true,
 			crossDomain: true,
 			beforeSend: function (xhr) {
-				xhr.setRequestHeader("Authorization", "Bearer " + "kuD6IeilpAkMPqsez9uU8qSnIFCP");
+				xhr.setRequestHeader("Authorization", "Bearer " + "1uYMtmGTRopdpOgNDxuZt2MVM3qZ");
 			},
 			success: function (json) {
 				console.log("json: " + JSON.stringify(json));
