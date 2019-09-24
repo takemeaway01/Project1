@@ -138,7 +138,7 @@ $("#go").on("click", function (event) {
 			pretty: 1
 		}
 	}).then(function (response) {
-		console.log("response.results: " + response.results[0].geometry);
+		console.log("response.results: " + JSON.stringify(response.results[0].geometry));
 
 		// Store results from Open Cage Data API in Firebase's DB
 		database.ref("/OpenCageDataResults").set(response.results[0].geometry);
@@ -151,55 +151,55 @@ $("#go").on("click", function (event) {
 		apiLongitude = OCDCoordinates.lng;
 	}).then(function () {
 		console.log("apiLatitude: " + apiLatitude);
-		console.log("apiLongitude: " + apiLongitude);
+		console.log("apiLongitude: " + Math.abs(apiLongitude));
 
-		// Make the AJAX request to the Amadeus API
-		// The API's Access Token is ONLY VALID for 30 minutes!!!
-		$.ajax({
-			url: "https://test.api.amadeus.com/v1/reference-data/locations/pois?",
-			method: "GET",
-			data: {
-				latitude: apiLatitude,
-				longitude: apiLongitude,
-				radius: apiRadius,
-				"page[limit]": apiPageLimit,
-				"page[offset]": apiPageOffset
-			},
-			dataType: "json",
-			async: true,
-			crossDomain: true,
-			beforeSend: function (xhr) {
-				xhr.setRequestHeader("Authorization", "Bearer " + "2ufdZWSucZnmRefVBkRmPAG3e8yp");
-			},
-			success: function (json) {
-				console.log("json: " + json);
 
-				// Store results from Amadeus API in Firebase's DB
-				database.ref("/AmadeusResults").set(json);
-
-				// Store results data array into array AmadeusData
-				AmadeusData = json.data;
-
-				// Parse results to grab relevant data of Point of Interests (up to 10 items per page)
-				// 6 categories: Sights, Beach/Park, Historical, Nightlife, Restaurant and Shopping
-				// Rank (0-100): Based on popularity and on certain categories of social relevance.
-				//				 For example, found popular venues to visit, but not to eat or vice-versa.
-				for (var i = 0; i < AmadeusData.length; i++) {
-					poiData.push({ category: AmadeusData[i].category, name: AmadeusData[i].name, rank: AmadeusData[i].rank, tags: AmadeusData[i].tags });
-
-					console.log("i: " + i + "; poiData[i].category: " + poiData[i].category);
-					console.log("i: " + i + "; poiData[i].name: " + poiData[i].name);
-					console.log("i: " + i + "; poiData[i].rank: " + poiData[i].rank);
-					console.log("i: " + i + "; poiData[i].tags: " + poiData[i].tags);
-				}
-
-				// Display results into table within card
-
-			},
-			error: function (err) {
-				console.log(err);
+	
+	// Make the AJAX request to the Amadeus API
+	// The API's Access Token is ONLY VALID for 30 minutes!!!
+	$.ajax({
+		url: "https://test.api.amadeus.com/v1/reference-data/locations/pois?",
+		method: "GET",
+		data: {
+			latitude: apiLatitude,
+			longitude: Math.abs(apiLongitude),
+			radius: apiRadius
+		},
+		dataType: "json",
+		async: true,
+		crossDomain: true,
+		beforeSend: function (xhr) {
+			xhr.setRequestHeader("Authorization", "Bearer " + "kuD6IeilpAkMPqsez9uU8qSnIFCP");
+		},
+		success: function (json) {
+			console.log("json: " + json);
+			
+			// Store results from Amadeus API in Firebase's DB
+			database.ref("/AmadeusResults").set(json);
+			
+			// Store results data array into array AmadeusData
+			AmadeusData = json.data;
+			
+			// Parse results to grab relevant data of Point of Interests (up to 10 items per page)
+			// 6 categories: Sights, Beach/Park, Historical, Nightlife, Restaurant and Shopping
+			// Rank (0-100): Based on popularity and on certain categories of social relevance.
+			//				 For example, found popular venues to visit, but not to eat or vice-versa.
+			for (var i = 0; i < AmadeusData.length; i++) {
+				poiData.push({ category: AmadeusData[i].category, name: AmadeusData[i].name, rank: AmadeusData[i].rank, tags: AmadeusData[i].tags });
+				
+				console.log("i: " + i + "; poiData[i].category: " + poiData[i].category);
+				console.log("i: " + i + "; poiData[i].name: " + poiData[i].name);
+				console.log("i: " + i + "; poiData[i].rank: " + poiData[i].rank);
+				console.log("i: " + i + "; poiData[i].tags: " + poiData[i].tags);
 			}
-		});
+			
+			// Display results into table within card
+			
+		},
+		error: function (err) {
+			console.log(err);
+		}
+	});
 
 
 	}).catch(function () {
