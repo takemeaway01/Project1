@@ -161,7 +161,6 @@ $("#go").on("click", function (event) {
 		$('js-interests').text('Error loading information');
 	})
 
-<<<<<<< HEAD
 
     var settings = {
         "async": true,
@@ -203,8 +202,6 @@ $("#go").on("click", function (event) {
 		console.log("after")
 	});
 
-=======
->>>>>>> master
 });
 
 $(document).ready(function(){
