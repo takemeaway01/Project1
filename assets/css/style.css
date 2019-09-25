@@ -7,6 +7,20 @@ video {
   z-index: -1;
 }
 /* LAYOUT */
+#modal1 {
+        color: black;   
+    }
+
+    #modal-btn {
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    width: 100%;
+    
+    }
 
 .travel-search {
     overflow: hidden;
@@ -28,9 +42,8 @@ video {
 
 .search-repeat {
     position: relative;
-    background: #eee;
+   border: solid 1px;
     padding: 4px;
-    transition: background 0.2s;
 }
 
 .search-repeat:hover {
@@ -62,7 +75,7 @@ h1.page-logo {
     position: absolute;
     text-align: center;
     color: white;
-    font-size: 3.5rem;
+    font-size: 5.5rem;
     width: 100%;
     line-height: 80%;
     padding-top: 10px;
@@ -99,5 +112,6 @@ button.travel-button {
     border: none;
 }
 .travel-results{
-color: white
+color: white;
+text-align: center;
 }
