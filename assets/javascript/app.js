@@ -36,10 +36,8 @@ function clear() {
 	$(".travel-results").empty();
 }
 
-
 // MAIN PROCESS
 // ==============================================================================
-
 
 // CLICK HANDLERS
 // ==============================================================================
@@ -53,8 +51,6 @@ $("#go").on("click", function (event) {
 	// Format it so that special characters are properly handled by using encodeURIComponent().
 	var strCity = encodeURIComponent($("#search-city").val().trim());
 
-	console.log("strCity: " + strCity);
-
 	// Make the AJAX request to the Open Weather Map API to get the city's current weather
 	var settings = {
 		"async": true,
@@ -67,8 +63,6 @@ $("#go").on("click", function (event) {
 		}
 	}
 	$.ajax(settings).done(function (response) {
-		console.log("Weather info response: " + response);
-
 		$("#tempimg").html('<img src="http://openweathermap.org/img/wn/' + response.weather[0].icon + '@2x.png">');
 		$(".js-city").text(strCity);
 		$(".js-weather-temp").text(response.main.temp);
@@ -86,8 +80,6 @@ $("#go").on("click", function (event) {
 			pretty: 1
 		}
 	}).then(function (response) {
-		console.log("response.results: " + JSON.stringify(response.results[0].geometry));
-
 		// Store results from Open Cage Data API in Firebase's DB
 		database.ref("/OpenCageDataResults/" + strCity).push(response.results[0].geometry);
 
@@ -98,9 +90,6 @@ $("#go").on("click", function (event) {
 		apiLatitude = CityLatLng.lat;
 		apiLongitude = CityLatLng.lng;
 	}).then(function () {
-		console.log("apiLatitude: " + apiLatitude);
-		console.log("apiLongitude: " + Math.abs(apiLongitude));
-
 		// Make the AJAX request to the Amadeus API
 		// The API's Access Token is ONLY VALID for 30 minutes!!!
 		$.ajax({
@@ -115,11 +104,9 @@ $("#go").on("click", function (event) {
 			async: true,
 			crossDomain: true,
 			beforeSend: function (xhr) {
-				xhr.setRequestHeader("Authorization", "Bearer " + "N9bzVxSIprj0N3D7oIPUEg7KErye");
+				xhr.setRequestHeader("Authorization", "Bearer " + "enhjGzLeebm2NmOahjRfGSNoFSeA");
 			},
 			success: function (json) {
-				console.log("json: " + JSON.stringify(json));
-
 				// Store results from Amadeus API in Firebase's DB
 				database.ref("/AmadeusResults/" + strCity).push(json);
 
@@ -133,8 +120,6 @@ $("#go").on("click", function (event) {
 				for (var i = 0; i < AmadeusData.length; i++) {
 					poiData.push({ category: AmadeusData[i].category, name: AmadeusData[i].name, rank: AmadeusData[i].rank, tags: AmadeusData[i].tags });
 
-
-
 					// Create the new row
 					var newRow = $("<tr>").append(
 						$("<td>").text(poiData[i].name),
@@ -143,26 +128,17 @@ $("#go").on("click", function (event) {
 
 					// Append the new row to the table
 					$("#poi-table > tbody").append(newRow);
-
-					// console.log("i: " + i + "; poiData[i].category: " + poiData[i].category);
-					// console.log("i: " + i + "; poiData[i].name: " + poiData[i].name);
-					// console.log("i: " + i + "; poiData[i].rank: " + poiData[i].rank);
-					// console.log("i: " + i + "; poiData[i].tags: " + poiData[i].tags);
 				}
-
-
 			},
 			error: function (err) {
-				console.log(err);
+				$('js-interests').text('Error loading information');
 			}
 		});
-
 	}).catch(function () {
 		$('js-interests').text('Error loading information');
 	})
-
 });
 
-$(document).ready(function(){
-	    $('.modal').modal();
-	  });
+$(document).ready(function () {
+	$('.modal').modal();
+});

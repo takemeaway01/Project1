@@ -1,117 +1,147 @@
 video {
-    position: fixed;
-  right: 0;
-  bottom: 0;
-  min-width: 100%;
-  min-height: 100%;
-  z-index: -1;
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	min-width: 100%;
+	min-height: 100%;
+	z-index: -1;
 }
 /* LAYOUT */
-#modal1 {
-        color: black;   
-    }
 
-    #modal-btn {
-        overflow: hidden;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    width: 100%;
-    
-    }
+#modal1 {
+	    color: black;   
+	}
+
+	#modal-btn {
+	    overflow: hidden;
+	    position: relative;
+	    display: flex;
+	    flex-direction: column;
+	    justify-content: center;
+	    align-items: center;
+	    width: 100%;
+
+	}
 
 .travel-search {
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    transition: all 0.8s ease;
-    opacity: 1;
+	overflow: hidden;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	transition: all 0.8s ease;
+	opacity: 1;
 }
 
 .travel-search.hidden {
-    height: 0;
-    opacity: 0;
-    transition: all 1.3s ease;
+	height: 0;
+	opacity: 0;
+	transition: all 1.3s ease;
 }
 
 .search-repeat {
-    position: relative;
-   border: solid 1px;
-    padding: 4px;
+	position: relative;
+    border: solid 1px;
+	padding: 4px;
 }
 
 .search-repeat:hover {
-    background: #5c99cf;
-    cursor: pointer;
+	background: #5c99cf;
+	cursor: pointer;
 }
 
 .search-repeat p {
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    top: 15px;
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	top: 15px;
 }
 
 p.page-logo {
-    top: initial;
-    position: relative;
-    display: block;
-    font-size: 2rem;
-    text-align: left;
-    padding-bottom: 4px;
+	top: initial;
+	position: relative;
+	display: block;
+	font-size: 2rem;
+	text-align: left;
+	padding-bottom: 4px;
 }
 
 .page-logo {
-    font-family: 'Faster One', cursive;
+	font-family: 'Faster One', cursive;
 }
 
 h1.page-logo {
-    position: absolute;
-    text-align: center;
-    color: white;
-    font-size: 5.5rem;
-    width: 100%;
-    line-height: 80%;
-    padding-top: 10px;
+	position: absolute;
+	text-align: center;
+	color: white;
+	font-size: 5.5rem;
+	width: 100%;
+	line-height: 80%;
+	padding-top: 10px;
 }
 
 .search-lead-text {
-    text-align: center;
-    margin-bottom: 15px;
+	text-align: center;
+	margin-bottom: 15px;
 }
 
 .search-lead-text h1 {
-    font-size: 1.7rem;
-    color: white;
+	font-size: 1.7rem;
+	color: white;
 }
 
 .search-box {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    background: rgba(255,255,255,0.3);
-    border-radius: 15px;
+	display: flex;
+	align-items: center;
+	padding: 10px;
+	background: rgba(255,255,255,0.3);
+	border-radius: 15px;
 }
-
-
 
 button.travel-button {
-    height: 45px;
-    margin-left: 10px;
-    width: 45px;
-    font-size: 1rem;
-    font-weight: 900;
-    border-radius: 30px;
-    letter-spacing: 1px;
-    border: none;
+	height: 45px;
+	margin-left: 10px;
+	width: 45px;
+	font-size: 1rem;
+	font-weight: 900;
+	border-radius: 30px;
+	letter-spacing: 1px;
+	border: none;
 }
+
 .travel-results{
-color: white;
-text-align: center;
+	color: white;
+	text-align: center;
+}
+
+#poi-table {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	border-collapse: collapse;
+	position: relative;
+	margin: auto;
+	margin-left: 300px;
+	width: 55%;
+}
+
+#poi-table th, #poi-table td {
+	border: 2px solid #ddd;
+	padding: 5px;
+	text-align: left;
+}
+
+#poi-table tr:hover {
+	background-color:rgba(255,255,255,0.3);
+}
+
+#poi-table th {
+	background-color: rgb(210, 219, 219);
+	text-align: center;
+	color: black;
+}
+
+#poi-table td {
+	background-color: transparent;
+	color: black;
 }
