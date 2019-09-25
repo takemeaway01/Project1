@@ -162,3 +162,7 @@ $("#go").on("click", function (event) {
 	})
 
 });
+
+$(document).ready(function(){
+	    $('.modal').modal();
+	  });
