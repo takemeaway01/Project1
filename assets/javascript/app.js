@@ -37,24 +37,6 @@ function clear() {
 }
 
 
-$(".travel-button").on("click", function () {
-	console.log("in here")
-	var city = $("#city").val()
-
-
-
-
-
-
-})
-
-
-
-
-
-
-
-
 // MAIN PROCESS
 // ==============================================================================
 
@@ -133,7 +115,7 @@ $("#go").on("click", function (event) {
 			async: true,
 			crossDomain: true,
 			beforeSend: function (xhr) {
-				xhr.setRequestHeader("Authorization", "Bearer " + "yKraSolsA4XaMhPkfejUO5JOCAqA");
+				xhr.setRequestHeader("Authorization", "Bearer " + "N9bzVxSIprj0N3D7oIPUEg7KErye");
 			},
 			success: function (json) {
 				console.log("json: " + JSON.stringify(json));
